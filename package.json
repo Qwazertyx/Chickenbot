@@ -1,0 +1,22 @@
+{
+  "name": "chickenbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Qwazertyx/Chickenbot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Qwazertyx/Chickenbot/issues"
+  },
+  "homepage": "https://github.com/Qwazertyx/Chickenbot#readme",
+  "dependencies": {
+    "discord.js": "^14.11.0"
+  }
+}
