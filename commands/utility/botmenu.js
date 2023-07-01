@@ -1,4 +1,4 @@
-const { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, SlashCommandBuilder } = require('discord.js');
+const { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, SlashCommandBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 
@@ -39,7 +39,7 @@ module.exports = {
 		
 		const filter = i => i.customId === 'options' && i.user.id === interaction.user.id;
 
-        const collector = interaction.channel.createMessageComponentCollector({ filter, time: 15000 });
+        const collector = interaction.channel.createMessageComponentCollector({ filter, time: 30000 });
 
         collector.on('collect', async i => {
             await i.deferUpdate();
@@ -61,19 +61,45 @@ module.exports = {
                 infoText = path.join(__dirname, '../../', 'data', 'poupi.txt');
             }
 
-            if (imagePath && infoText) {
-                const imageFile = fs.readFileSync(imagePath);
+			if (imagePath && infoText) {
+				const imageFile = fs.readFileSync(imagePath);
 				const textContent = fs.readFileSync(infoText, 'utf-8');
-                await i.followUp({
-                    content: textContent,
-                    files: [{
-                        attachment: imageFile,
-                        name: 'image.png'
-                    }]
-                });
-            }
-        });
-
+				const lines = textContent.split('\n');
+				const firstLine = lines[0].trim();  // Sélectionne la première ligne et supprime les espaces inutiles
+				const lastLine = lines[lines.length - 1].trim();  // Sélectionne la dernière ligne et supprime les espaces inutiles
+				const content = `${firstLine}\n${lastLine}`;  // Concatène la première ligne et la dernière ligne avec un saut de ligne entre elles
+				
+				const rowWithButton = new ActionRowBuilder()//bouton
+					.addComponents(
+						new ButtonBuilder()
+							.setCustomId('toggle-text')
+							.setLabel('+')
+							.setStyle(ButtonStyle.Secondary)
+				);
+				const fullTextCollector = interaction.channel.createMessageComponentCollector({
+					filter: component => component.customId === 'toggle-text' && component.user.id === interaction.user.id,
+					time: 20000
+				});
+				fullTextCollector.on('collect', async component => {
+					const currentLabel = component.label;
+		
+					await component.update({
+						content: textContent,
+						files: [],
+						components: []
+					});
+				});
+		
+				await i.followUp({
+					content: content,
+					files: [{
+						attachment: imageFile,
+						name: 'image.png'
+					}],
+					components: [rowWithButton],
+				});
+			}
+		});
         collector.on('end', collected => {
             if (collected.size === 0) {
                 interaction.editReply('You did not make a selection in time.');
