@@ -39,7 +39,7 @@ module.exports = {
 		
 		const filter = i => i.customId === 'options' && i.user.id === interaction.user.id;
 
-        const collector = interaction.channel.createMessageComponentCollector({ filter, time: 30000 });
+        const collector = interaction.channel.createMessageComponentCollector({ filter, time: 50000 });
 
         collector.on('collect', async i => {
             await i.deferUpdate();
@@ -84,19 +84,21 @@ module.exports = {
 					const currentLabel = component.label;
 		
 					await component.update({
-						content: textContent,
+						content: "```" + textContent + "```",
 						files: [],
-						components: []
+						components: [],
+						ephemeral: true
 					});
 				});
 		
 				await i.followUp({
-					content: content,
+					content: "```" +content +"```",
 					files: [{
 						attachment: imageFile,
 						name: 'image.png'
 					}],
 					components: [rowWithButton],
+					ephemeral: true
 				});
 			}
 		});
