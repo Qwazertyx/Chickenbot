@@ -63,11 +63,11 @@ module.exports = {
 
 			if (imagePath && infoText) {
 				const imageFile = fs.readFileSync(imagePath);
-				const textContent = fs.readFileSync(infoText, 'utf-8');
-				const lines = textContent.split('\n');
-				const firstLine = lines[0].trim();  // Sélectionne la première ligne et supprime les espaces inutiles
-				const lastLine = lines[lines.length - 1].trim();  // Sélectionne la dernière ligne et supprime les espaces inutiles
-				const content = `${firstLine}\n${lastLine}`;  // Concatène la première ligne et la dernière ligne avec un saut de ligne entre elles
+                const textContent = fs.readFileSync(infoText, 'utf-8');
+                const lines = textContent.split('\n');
+                const lastLine = lines[lines.length - 1].trim();  // Sélectionne la dernière ligne et supprime les espaces inutiles
+                const [date, percentage] = lastLine.split(',');  // Supposant que la dernière ligne est au format "date, pourcentage"
+                const content = `Dernière info : ${date} - Pourcentage : ${percentage}`;  // Crée le texte final à afficher
 				
 				const rowWithButton = new ActionRowBuilder()//bouton
 					.addComponents(
