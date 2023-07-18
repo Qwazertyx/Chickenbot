@@ -28,7 +28,7 @@ with open(path + 'generalinfo.txt', 'w') as file:
     for entry in output_data:
         timestamp = entry[0]
         percentage = entry[1]
-        date = datetime.datetime.fromtimestamp(timestamp / 1000).strftime('%H:%M %d/%m/%Y')
+        date = datetime.datetime.fromtimestamp(timestamp).strftime('%H:%M %d/%m/%Y')
         percentage_formatted = '{:.2f}'.format(percentage)  # Formater le pourcentage avec deux décimales
         lastpercent = percentage_formatted
         lastdate = date
